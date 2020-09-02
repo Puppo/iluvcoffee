@@ -1,6 +1,11 @@
 import { Module, Scope } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
+
 import { EventEntity } from '../events/entities/event.entity';
+
+import coffeesConfig from './config/coffee.config';
+
 import { CoffeesService } from './coffees.service';
 import { CoffeesController } from './coffees.controller';
 import { CoffeeEntity } from './entities/coffee.entity';
@@ -11,6 +16,7 @@ import { Connection } from 'typeorm';
 @Module({
   imports: [
     TypeOrmModule.forFeature([CoffeeEntity, FlavorEntity, EventEntity]),
+    ConfigModule.forFeature(coffeesConfig),
   ],
   controllers: [CoffeesController],
   providers: [
