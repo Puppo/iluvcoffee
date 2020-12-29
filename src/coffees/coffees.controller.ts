@@ -14,11 +14,20 @@ import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { CoffeeEntity } from './entities/coffee.entity';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import {
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('coffees')
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesSv: CoffeesService) {}
 
+  @ApiResponse({ status: 403, description: 'Forbidden.' })
   @Public()
   @Get()
   findAll(
@@ -27,6 +36,8 @@ export class CoffeesController {
     return this.coffeesSv.findAll(paginationQuery);
   }
 
+  @ApiNotFoundResponse({ description: 'Not found.' })
+  @ApiForbiddenResponse({ description: 'Forbidden.' })
   @Get(':id')
   findById(@Param('id', ParseIntPipe) id: string): Promise<CoffeeEntity> {
     return this.coffeesSv.findOne(id);
@@ -40,7 +51,7 @@ export class CoffeesController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateCoffeeDto: Partial<CreateCoffeeDto>,
+    @Body() updateCoffeeDto: UpdateCoffeeDto,
   ): Promise<CoffeeEntity> {
     return this.coffeesSv.update(id, updateCoffeeDto);
   }
