@@ -25,12 +25,7 @@ export class CoffeesService {
     private readonly configService: ConfigService,
     @Inject(coffeesConfig.KEY)
     private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>,
-  ) {
-    console.log('CoffeesService ctor', coffeeBrands);
-    const databaseHost = this.configService.get('database.host', 'localhost');
-    console.log(databaseHost);
-    console.log(this.coffeesConfiguration.foo);
-  }
+  ) {}
 
   findAll(paginationQuery: PaginationQueryDto): Promise<CoffeeEntity[]> {
     const { limit, offset } = paginationQuery;
