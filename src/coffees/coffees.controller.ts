@@ -8,34 +8,43 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { CoffeesService } from './coffees.service';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { Coffee } from './entities/coffee.entity';
 
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeesSv: CoffeesService) {}
 
   @Get()
-  findAll(@Query() paginationQuery) {
-    return this.coffeesSv.findAll();
+  async findAll(
+    @Query() paginationQuery: PaginationQueryDto,
+  ): Promise<Coffee[]> {
+    return await this.coffeesSv.findAll(paginationQuery);
   }
 
   @Get(':id')
-  findById(@Param('id') id: string) {
-    return this.coffeesSv.findOne(id);
+  async findById(@Param('id') id: string): Promise<Coffee> {
+    return await this.coffeesSv.findOne(id);
   }
 
   @Post()
-  create(@Body() createCoffeeDto: any): void {
-    return this.coffeesSv.create(createCoffeeDto);
+  async create(@Body() createCoffeeDto: CreateCoffeeDto): Promise<Coffee> {
+    return await this.coffeesSv.create(createCoffeeDto);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCoffeeDto: any) {
-    return this.coffeesSv.update(id, updateCoffeeDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateCoffeeDto: UpdateCoffeeDto,
+  ): Promise<Coffee> {
+    return await this.coffeesSv.update(id, updateCoffeeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.coffeesSv.remove(id);
+  async remove(@Param('id') id: string): Promise<Coffee> {
+    return await this.coffeesSv.remove(id);
   }
 }
